@@ -15,6 +15,12 @@ public class Commande {
 		this.dateCommande = dateCommande;
 		this.idClient = idClient;
 	}
+	public Commande(double amount, Date dateCommande, int idClient) {
+		super();
+		this.amount = amount;
+		this.dateCommande = dateCommande;
+		this.idClient = idClient;
+	}
 	public int getIdCommande() {
 		return idCommande;
 	}

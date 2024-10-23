@@ -5,20 +5,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import fr.fms.dao.BddConnection;
+import fr.fms.dao.ClientDao;
+import fr.fms.dao.CommandeDao;
+import fr.fms.dao.DaoFactory;
+import fr.fms.entities.Commande;
 import fr.fms.entities.Formation;
 
 public  class IBusinessImpl implements IBusiness<Formation>{
-	
+	private HashMap<Integer,Formation> cart;
 	private Connection connection; 
 	private BddConnection bddConnection; 
 	private HashMap<Integer, Formation> formations;
+	
 	// Constructeur
 	
 	public IBusinessImpl() {
-		this.formations = new HashMap<>();
+		this.cart = new HashMap<Integer, Formation>();
 	}
 	
 	
@@ -56,5 +62,57 @@ public  class IBusinessImpl implements IBusiness<Formation>{
 		}
 		return null; 
 	 }
-
+	//ajoute au panier
+	@Override
+	public void addToCart(Formation formation) {
+		
+		Formation forma = cart.get(formation.getIdFormation());
+		if(forma != null) {
+			cart.put(formation.getIdFormation(), formation);
+		}
+			
+	}
+	//supprime du panier
+	@Override
+	public void removeFromCart(int id) {
+		Formation forma = cart.get(id);
+		if(forma != null) {
+			
+			cart.remove(id);
+		}
+	}
+	@Override
+	public  ArrayList<Formation> getCart(){
+		return new ArrayList<Formation> (cart.values());
+		
+	}
+	
+	@Override
+	public boolean order(int idClient) {
+		ClientDao clientDao = new ClientDao();
+		CommandeDao cDao = new CommandeDao();
+			double total = getTotal();
+			if(clientDao.read(idClient) != null) {
+				Commande commande = new Commande(total, new Date(),idClient);
+				if(cDao.create(commande)) {
+					return true; 
+				}
+			}
+		return false;
+	}
+	
+	public double getTotal() {
+		double [] total = {0};
+		cart.values().forEach((a) -> total[0] += a.getPrix()); 	
+		return total[0];
+	}
+	public boolean isCartEmpty() {
+		return cart.isEmpty();
+	}
+	
+	public void clearCart() {
+		cart.clear();		
+	}
+	
+	
 }

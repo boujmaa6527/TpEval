@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
+import java.util.Scanner;
 
 import fr.fms.entities.Formation;
 
@@ -30,7 +30,7 @@ import fr.fms.entities.Formation;
 		
 		try(Statement statement = connection.createStatement()){
 			String str = "INSERT INTO t_formations (NomFormation, DescriptionFormation, DureeJour, DistancielPresentiel, Prix, IdCategory)"
-					+ "VALUES ('" + obj.getIdFormation() +"' ,'"+
+					+ "VALUES ('" + obj.getNomFormation() +"' ,'"+
 									obj.getDescriptionFormation() +"' , "+ 
 									obj.getDureeJour()+" , "+ 
 									obj.getPresentielDistanciel()+" , "+ obj.getPrix()+ ", "+obj.getIdCategory()+");";
@@ -196,7 +196,7 @@ import fr.fms.entities.Formation;
 			return listFormationByWordKey; 
 		}
 	
-
+	//renvoie la liste des formation en presentiel ou distanciel
 	public ArrayList<Formation> readAllByPresentielDistanciel(String str){
 		connection =  (Connection) BddConnection.Connect();
 		FormationDao fdao = new FormationDao();
