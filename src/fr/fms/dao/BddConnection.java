@@ -23,7 +23,7 @@ public class BddConnection {
 						
 						try {
 							
-							String url = "jdbc:mariadb://localhost:3306/Shop";
+							String url = "jdbc:mariadb://localhost:3306/Eval";
 							String user = "root";
 							String pwd = "fms2024";
 							
