@@ -25,10 +25,12 @@ public class FormationMyApp {
 	public static IBusinessImpl business = new IBusinessImpl();
 	static CategoryDao cDao = new CategoryDao();
 	static FormationDao  fDao = new FormationDao();
+	static ArrayList<Formation> listFormationPanier = new ArrayList<Formation>();
 	
 	public static void main(String[] args) {
 		CategoryDao cDao = new CategoryDao();
 		business.readAll();
+		
 		FormationDao  fdao = new FormationDao();
 		//fdao.readAll();
 		//System.out.println(fdao.readAll());
@@ -54,7 +56,7 @@ public class FormationMyApp {
 					removeFormation();
 					break;
 				case 3:
-					displayCart();
+					displayCart(true);
 					break;
 				case 4:
 					displayFormation();
@@ -71,6 +73,7 @@ public class FormationMyApp {
 				case 8:
 					displayFormationPresentielDistanciel();
 					break;
+				
 			}
 		}
 		
@@ -90,60 +93,81 @@ public class FormationMyApp {
 		System.out.println("9 : Connexion(Deconnexion) à votre compte");
 		System.out.println("10 : sortir de l'application");
 	}
-	public static void displayFormation() { 				
+	public static void displayFormation() { 	
+		System.out.println("LISTES DES FORMATIONS :");
 		System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
-		System.out.printf("%s | %s | %s | %s | %s | %s %n",COLUMN_ID,COLUMN_NOMFORMATION,COLUMN_DESCRIPTION,COLUMN_DUREEJOUR, COLUMN_DIST_PRESENS, COLUMN_PRIX );
+		System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s %n",COLUMN_ID,COLUMN_NOMFORMATION,COLUMN_DESCRIPTION,COLUMN_DUREEJOUR, COLUMN_DIST_PRESENS, COLUMN_PRIX );
 		System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
-		business.readAll().forEach( a -> System.out.printf("%s | %s | %s | %s | %s | %s%n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(), a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
+		business.readAll().forEach( a -> System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s%n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(), a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
 	}
-	public static void displayCategorie() { 				
+	public static void displayCategorie() { 	
+		System.out.println("LISTES DES CATEGORIES :");
 		System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
-		System.out.printf("%s | %s | %s %n",COLUMN_ID,COLUMN_NOMCATEGORIE,COLUMN_DESCRIPTIONCATEGORIE );
+		System.out.printf("%-15s | %-20s | %-20s %n",COLUMN_ID,COLUMN_NOMCATEGORIE,COLUMN_DESCRIPTIONCATEGORIE );
 		System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
-		cDao.readAll().forEach( a -> System.out.printf("%s | %s | %s%n",a.getIdCatgory(),a.getNomCategory(),a.getDescriptionCategory()));
+		cDao.readAll().forEach( a -> System.out.printf("%-15s | %-20s | %-20s%n",a.getIdCatgory(),a.getNomCategory(),a.getDescriptionCategory()));
 	}
 	public static void displayFormationByCategorie() {
 		System.out.println("Entrez numéro de la categorie");
 		int idCat = scan.nextInt();
-		System.out.println(fDao.readAllByIdCategory(idCat));
+		fDao.readAllByIdCategory(idCat).forEach(a -> System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s%n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(), a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
 		scan.nextLine();
+	}
+	public static void displayFormationPresentielDistanciel() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Choisir presentiel ou distanciel pour la formation (presentiel/distanciel)");
+		String str = sc.nextLine();
+		System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
+		System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s %n",COLUMN_ID,COLUMN_NOMFORMATION,COLUMN_DESCRIPTION,COLUMN_DUREEJOUR, COLUMN_DIST_PRESENS, COLUMN_PRIX );
+		System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
+		fDao.readAllByPresentielDistanciel(str).forEach(a -> System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s%n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(),a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
+		scan.nextLine();
+		
+		
 	}
 	public static void displayFormationByWordKey() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Entrez mot clé");
 		String str = sc.nextLine();
-		System.out.println(fDao.readAllByWordKey(str));
+		try {
+			System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
+			System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s %n",COLUMN_ID,COLUMN_NOMFORMATION,COLUMN_DESCRIPTION,COLUMN_DUREEJOUR, COLUMN_DIST_PRESENS, COLUMN_PRIX );
+			System.out.printf("-----------------------------------------------------------------------------------------------------------------------------------------------------%n");
+			fDao.readAllByWordKey(str).forEach(a -> System.out.printf("%-15s | %-15s | %-35s | %-15s | %-25s | %-15s%n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(),a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		scan.nextLine();
 	}
-	public static void displayFormationPresentielDistanciel() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Choisir fromation presentiel ou distanciel pour la formation");
-		String str = scan.nextLine();
-		System.out.println(fDao.readAllByPresentielDistanciel(str));
-		
-		
-	}
+	
 	public static void removeFormation() {
 		System.out.println("Selectionner l'id de l'article à supprimer du panier");
 		int id = scanInt();
-		business.removeFromCart(id);
-		displayCart();
+		listFormationPanier.remove(id);
+		displayCart(false);
 	}
-	public static void displayCart() {
+	public static void displayCart(boolean flag) {
 		//if(business.isCartEmpty()) 	System.out.println("PANIER VIDE");
 		//else{
 			System.out.println("CONTENU DU PANIER :");
 			System.out.printf("------------------------------------------------------------------------------------------------------------------------%n");
 			System.out.printf("%s | %s | %s |%s | %s | %s %n",COLUMN_ID,COLUMN_NOMFORMATION,COLUMN_DESCRIPTION,COLUMN_DUREEJOUR, COLUMN_DIST_PRESENS, COLUMN_PRIX );
 			System.out.printf("------------------------------------------------------------------------------------------------------------------------%n");
-			business.getCart().forEach( a -> System.out.printf("%s | %s |%s | %s | %s | %s %n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(), a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
-//			if(flag) {
-//				System.out.println("MONTANT TOTAL : " + business.getTotal());
-//				System.out.println("Souhaitez vous passer commande ? Oui/Non :");
-////				if(scan.next().equalsIgnoreCase("Oui")) {
-////					nextStep();
-////				}
-//			}
+			
+			
+			listFormationPanier.forEach( a -> System.out.printf("%s | %s |%s | %s | %s | %s %n",a.getIdFormation(),a.getNomFormation(),a.getDescriptionFormation(), a.getDureeJour(), a.getPresentielDistanciel(), a.getPrix()));
+			double TotaleFormation = 0;
+			for(Formation sum : listFormationPanier) {
+				TotaleFormation += sum.getPrix();
+			}
+			if(flag) {
+				System.out.println("MONTANT TOTAL : " + TotaleFormation+ "€");
+				System.out.println("Souhaitez vous passer commande ? Oui/Non :");
+				if(scan.next().equalsIgnoreCase("Oui")) {
+//					nextStep();
+				}
+			}
 		//}
 	}
 	public static void addFormation() {
@@ -151,12 +175,11 @@ public class FormationMyApp {
 		int id = scanInt();
 		Formation formation = fDao.read(id);
 		if(formation != null) {
-			business.addToCart(formation);
-			System.out.println(formation);
-			//displayCart(false);
+			listFormationPanier.add(formation);
+			displayCart(false);
 		}
 		else System.out.println("la formation que vous souhaitez ajouter n'existe pas");
-		displayCart();
+		//displayCart();
 	} 
 	public static int scanInt() {
 		while(!scan.hasNextInt()) {

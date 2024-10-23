@@ -185,31 +185,29 @@ import fr.fms.entities.Formation;
 		connection =  (Connection) BddConnection.Connect();
 		FormationDao fdao = new FormationDao();
 		ArrayList<Formation> listFormationByWordKey = new ArrayList<Formation>();
-
 		for(Formation formation: fdao.readAll()) {
 			if(formation.getNomFormation().equalsIgnoreCase(str)) {
 				listFormationByWordKey.add(formation);
-				//System.out.println(listFormationByWordKey);
 				}
-			//System.out.println(listFormationByWordKey);
 			}
-			return listFormationByWordKey; 
+			return listFormationByWordKey;
 		}
+		
 	
 	//renvoie la liste des formation en presentiel ou distanciel
 	public ArrayList<Formation> readAllByPresentielDistanciel(String str){
 		connection =  (Connection) BddConnection.Connect();
 		FormationDao fdao = new FormationDao();
-		ArrayList<Formation> listFormationByWordKey = new ArrayList<Formation>();
+		ArrayList<Formation> listFormationByPresentielDistanciel = new ArrayList<Formation>();
 
 		for(Formation formation: fdao.readAll()) {
+			
 			if(formation.getPresentielDistanciel().equalsIgnoreCase(str)) {
-				listFormationByWordKey.add(formation);
-				//System.out.println(listFormationByWordKey);
+				listFormationByPresentielDistanciel.add(formation);
+				
 				}
-			//System.out.println(listFormationByWordKey);
 			}
-			return listFormationByWordKey; 
+			return listFormationByPresentielDistanciel; 
 		}
 	
 	}

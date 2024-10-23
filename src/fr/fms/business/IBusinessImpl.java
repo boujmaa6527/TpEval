@@ -18,11 +18,8 @@ import fr.fms.entities.Formation;
 public  class IBusinessImpl implements IBusiness<Formation>{
 	private HashMap<Integer,Formation> cart;
 	private Connection connection; 
-	private BddConnection bddConnection; 
-	private HashMap<Integer, Formation> formations;
 	
 	// Constructeur
-	
 	public IBusinessImpl() {
 		this.cart = new HashMap<Integer, Formation>();
 	}
@@ -77,7 +74,6 @@ public  class IBusinessImpl implements IBusiness<Formation>{
 	public void removeFromCart(int id) {
 		Formation forma = cart.get(id);
 		if(forma != null) {
-			
 			cart.remove(id);
 		}
 	}
