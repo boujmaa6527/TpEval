@@ -62,7 +62,7 @@ import fr.fms.entities.Formation;
 							result.getString("nomFormation"),
 							result.getString("descriptionFormation"),
 							result.getInt("dureeJour"),
-							result.getString("distancielPresentiel"),
+							result.getBoolean("distancielPresentiel"),
 							result.getDouble("prix"),
 							result.getInt("idCategory"));
 				}
@@ -82,7 +82,7 @@ import fr.fms.entities.Formation;
 			preparedStatement.setString(1, obj.getNomFormation());
 			preparedStatement.setString(1, obj.getDescriptionFormation());
 			preparedStatement.setInt(1, obj.getDureeJour());
-			preparedStatement.setString(1, obj.getPresentielDistanciel());
+			preparedStatement.setBoolean(1, obj.getPresentielDistanciel());
 			preparedStatement.setDouble(1, obj.getPrix());
 			preparedStatement.setInt(3, obj.getIdFormation());
 			
@@ -129,7 +129,7 @@ import fr.fms.entities.Formation;
 						result.getString("nomFormation"),
 						result.getString("descriptionFormation"),
 						result.getInt("dureeJour"),
-						result.getString("distancielPresentiel"),
+						result.getBoolean("distancielPresentiel"),
 						result.getDouble("prix"),
 						result.getInt("idCategory"));
 				//on ajoute les données a la liste
@@ -164,7 +164,7 @@ import fr.fms.entities.Formation;
 						result.getString("nomFormation"),
 						result.getString("descriptionFormation"),
 						result.getInt("dureeJour"),
-						result.getString("distancielPresentiel"),
+						result.getBoolean("distancielPresentiel"),
 						result.getDouble("prix"),
 						result.getInt("idCategory"));
 				//on ajoute les données a la liste
@@ -183,11 +183,13 @@ import fr.fms.entities.Formation;
 	// renvoie les formations par mot clé
 	public ArrayList<Formation> readAllByWordKey(String str){
 		connection =  (Connection) BddConnection.Connect();
-		FormationDao fdao = new FormationDao();
 		ArrayList<Formation> listFormationByWordKey = new ArrayList<Formation>();
-		for(Formation formation: fdao.readAll()) {
-			if(formation.getNomFormation().equalsIgnoreCase(str)) {
-				listFormationByWordKey.add(formation);
+		
+		for(Formation formation: new FormationDao().readAll()) {
+			//la fonction contains est sensitive
+			if(formation.getNomFormation().contains(str) ) {
+					listFormationByWordKey.add(formation);
+					
 				}
 			}
 			return listFormationByWordKey;
@@ -199,17 +201,27 @@ import fr.fms.entities.Formation;
 		connection =  (Connection) BddConnection.Connect();
 		FormationDao fdao = new FormationDao();
 		ArrayList<Formation> listFormationByPresentielDistanciel = new ArrayList<Formation>();
-
+		boolean isPresentielDistanciel = false; 
+		if(str.equalsIgnoreCase("presentiel")) {
+			isPresentielDistanciel = true;
+		}else if(str.equalsIgnoreCase("distanciel")) {
+			isPresentielDistanciel = false;
+		}
+		
 		for(Formation formation: fdao.readAll()) {
 			
-			if(formation.getPresentielDistanciel().equalsIgnoreCase(str)) {
+			if(formation.getPresentielDistanciel() == true && isPresentielDistanciel) {
+				
 				listFormationByPresentielDistanciel.add(formation);
 				
+				
+				}else if(formation.getPresentielDistanciel() == false) {
+					listFormationByPresentielDistanciel.add(formation);
 				}
 			}
-			return listFormationByPresentielDistanciel; 
+		 return listFormationByPresentielDistanciel;
 		}
-	
+		
 	}
 	
 	

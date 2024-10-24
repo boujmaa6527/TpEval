@@ -43,7 +43,7 @@ public  class IBusinessImpl implements IBusiness<Formation>{
 						result.getString("nomFormation"),
 						result.getString("descriptionFormation"),
 						result.getInt("dureeJour"),
-						result.getString("distancielPresentiel"),
+						result.getBoolean("distancielPresentiel"),
 						result.getDouble("prix"),
 						result.getInt("idCategory"));
 				//on ajoute les données a la liste

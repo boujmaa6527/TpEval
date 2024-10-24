@@ -6,21 +6,22 @@ public class Formation {
 	private String nomFormation;
 	private String descriptionFormation; 
 	private int dureeJour;
-	private String presentielDistanciel;
+	private boolean presentielDistanciel;
 	private double prix;
 	private int idCategory; 
+	
 	public Formation(int idFormation, String nomFormation, String descriptionFormation, int dureeJour,
-			String presentielDistanciel, double prix, int idCategory) {
-		IdFormation = idFormation;
+			boolean	presentielDistanciel,double  prix, int idCategory) {
+		this.IdFormation = idFormation; 
 		this.nomFormation = nomFormation;
 		this.descriptionFormation = descriptionFormation;
 		this.dureeJour = dureeJour;
-		this.presentielDistanciel = presentielDistanciel;
+		this.presentielDistanciel =presentielDistanciel; 
 		this.prix = prix;
 		this.idCategory = idCategory; 
 	} 
 	public Formation( String nomFormation, String descriptionFormation, int dureeJour,
-			String presentielDistanciel, double prix, int idCategory) {
+			boolean presentielDistanciel, double prix, int idCategory) {
 		
 		this.nomFormation = nomFormation;
 		this.descriptionFormation = descriptionFormation;
@@ -64,11 +65,11 @@ public class Formation {
 		this.dureeJour = dureeJour;
 	}
 
-	public String getPresentielDistanciel() {
+	public boolean getPresentielDistanciel() {
 		return presentielDistanciel;
 	}
 
-	public void setPresentielDistanciel(String presentielDistanciel) {
+	public void setPresentielDistanciel(boolean presentielDistanciel) {
 		this.presentielDistanciel = presentielDistanciel;
 	}
 
